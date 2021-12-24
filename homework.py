@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Type
 
 
 @dataclass
@@ -19,11 +19,14 @@ class InfoMessage:
     def get_message(self) -> str:
         """Возвращает сообщение с данными."""
         return (
-            f'{self.text_message[0]} {self.training_type}; '
-            f'{self.text_message[1]} {self.duration:.3f} ч.; '
-            f'{self.text_message[2]} {self.distance:.3f} км; '
-            f'{self.text_message[3]} {self.speed:.3f} км/ч; '
-            f'{self.text_message[4]} {self.calories:.3f}.'
+            '{} {}; {} {:.3f} ч.; {} {:.3f} км; '
+            '{} {:.3f} км/ч; {} {:.3f}.'
+        ).format(
+            self.text_message[0], self.training_type,
+            self.text_message[1], self.duration,
+            self.text_message[2], self.distance,
+            self.text_message[3], self.speed,
+            self.text_message[4], self.calories
         )
 
 
@@ -121,12 +124,12 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    type_sensor: Dict[str, str] = {
+    sensor_types: Dict[str, Type[Training]] = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking
     }
-    class_name: str = type_sensor[workout_type]
+    class_name: Type[Training] = sensor_types[workout_type]
     return class_name(*data)
 
 
@@ -140,12 +143,11 @@ if __name__ == '__main__':
     packages: List[Tuple[str, List[int]]] = [
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
-        ('WLK', [9000, 1, 75, 180]),
+        ('WLK', [9000, 1, 75, 180])
     ]
     for workout_type, data in packages:
-        if (workout_type == ('SWM') or workout_type == ('RUN')
-           or workout_type == ('WLK')):
+        try:
             training = read_package(workout_type, data)
             main(training)
-        else:
+        except KeyError:
             print('Ошибка, не верно введен тип тренировки')

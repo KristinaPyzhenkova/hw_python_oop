@@ -6,9 +6,14 @@
 Данный модуль был реализован для изучания ООП.
 
 ## Инструкция по развёртыванию
-Cоздать и активировать виртуальное окружение: python3 -m venv env source env/bin/activate
-Установить зависимости из файла requirements.txt: pip install -r requirements.txt
-Запустить проект: python3 homework.py
+Cоздать и активировать виртуальное окружение:
+python3 -m venv env source env/bin/activate
+
+Установить зависимости из файла requirements.txt:
+pip install -r requirements.txt
+
+Запустить проект:
+python3 homework.py
 
 
 
